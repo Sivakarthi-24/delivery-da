@@ -112,10 +112,12 @@ npm run dev
 
 ## 📦 Deployment to Vercel
 
-1. Push this repository to GitHub or run `vercel` in the root folder.
-2. Build Command: `npm run build`
-3. Output Directory: `dist`
-4. Root Directory: `./`
+1. Commit and push the complete project, including `src/`, `index.html`, `phaser.min.js`, `package.json`, and `vite.config.js`.
+2. Set the Root Directory to `./`.
+3. Set the Build Command to `node build.js` (or `npm run build`).
+4. Set the Output Directory to `dist`.
+
+The deployment build uses Node.js directly and does not require Vite to be installed in production.
 
 ---
 

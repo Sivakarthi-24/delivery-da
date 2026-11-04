@@ -26,6 +26,17 @@ function copyRecursiveSync(src, dest) {
 
 console.log('Building DELIVERY DA! for distribution...');
 
+const requiredFiles = [
+  path.join(__dirname, 'index.html'),
+  path.join(__dirname, 'phaser.min.js'),
+  path.join(__dirname, 'src', 'main.js')
+];
+const missingFiles = requiredFiles.filter(file => !fs.existsSync(file));
+
+if (missingFiles.length > 0) {
+  throw new Error(`Cannot build: required project files are missing:\n${missingFiles.join('\n')}`);
+}
+
 if (fs.existsSync(distDir)) {
   fs.rmSync(distDir, { recursive: true, force: true });
 }
