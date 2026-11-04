@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>DELIVERY DA! - ஊரு முழுக்க DELIVERY!</title>
+  <link rel="stylesheet" href="./src/styles/main.css" />
+  <link rel="stylesheet" href="./src/styles/ui.css" />
+  <script src="./phaser.min.js"></script>
+</head>
+<body>
+  <div id="game-wrapper">
+    <!-- Phaser 3 Canvas Container -->
+    <div id="phaser-container"></div>
+
+    <!-- HTML / CSS UI Overlay -->
+    <div id="ui-overlay">
+
+      <!-- Top Persistent Status Bar -->
+      <div class="top-status-bar interactive">
+        <div class="coin-pill">
+          <span>💰</span>
+          <span id="ui-coin-count">150</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-lang-toggle" class="btn-icon" title="Switch Language">🌐 TA</button>
+          <button id="btn-pause-game" class="btn-icon" style="display: none;">⏸️</button>
+        </div>
+      </div>
+
+      <!-- MAIN MENU SCREEN -->
+      <div id="screen-main-menu" class="screen-menu interactive">
+        <div class="logo-container">
+          <div class="company-badge" data-i18n="company_name">NAMMA EXPRESS</div>
+          <h1 class="game-title" data-i18n="app_title">DELIVERY DA!</h1>
+          <div class="game-subtitle" data-i18n="tagline">EVERY STREET HAS A STORY. EVERY DELIVERY IS A CHALLENGE.</div>
+        </div>
+
+        <div class="menu-buttons">
+          <button id="btn-play-quick" class="btn-primary menu-btn-hero">
+            <span>🛵</span>
+            <span data-i18n="play">PLAY QUICK DELIVERY</span>
+          </button>
+
+          <div class="mode-row">
+            <button id="btn-mode-endless" class="mode-btn">
+              <span class="icon">🛣️</span>
+              <span data-i18n="endless_ride">Endless Ride</span>
+            </button>
+            <button id="btn-mode-festival" class="mode-btn">
+              <span class="icon">🪔</span>
+              <span data-i18n="festival_rush">Festival Rush</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bottom-nav-bar">
+          <button id="nav-btn-garage" class="nav-tab">
+            <span class="icon">🔧</span>
+            <span data-i18n="garage">Garage</span>
+          </button>
+          <button id="nav-btn-customize" class="nav-tab">
+            <span class="icon">👕</span>
+            <span data-i18n="customize">Rider Style</span>
+          </button>
+          <button id="nav-btn-achievements" class="nav-tab">
+            <span class="icon">🏆</span>
+            <span data-i18n="achievements">Awards</span>
+          </button>
+          <button id="nav-btn-settings" class="nav-tab">
+            <span class="icon">⚙️</span>
+            <span data-i18n="settings">Settings</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GAMEPLAY HUD -->
+      <div id="screen-gameplay-hud" class="game-hud" style="display: none;">
+        <div class="hud-top">
+          <div class="objective-banner">
+            <div id="hud-objective-tag" class="objective-tag" data-i18n="pickup">PICKUP RESTAURANT</div>
+            <div id="hud-objective-title" class="objective-title">Chennai Tiffin House</div>
+          </div>
+          <div id="hud-timer" class="timer-pill">02:30</div>
+        </div>
+
+        <!-- Navigation Widget -->
+        <div class="nav-widget">
+          <div id="nav-arrow" class="nav-arrow">⬆️</div>
+          <div class="nav-info">
+            <div id="nav-meters" class="nav-meters">850 m</div>
+            <div id="nav-street" class="nav-street">Usman Road</div>
+            <div class="route-progress-bar">
+              <div id="route-progress-fill" class="route-progress-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Speedometer -->
+        <div class="speed-widget">
+          <div id="hud-speed-val" class="speed-val">42</div>
+          <div class="speed-unit" data-i18n="speed">km/h</div>
+        </div>
+
+        <!-- Mobile Touch Controls -->
+        <div class="touch-controls">
+          <div class="touch-btn-group">
+            <button id="touch-left" class="touch-btn">⬅️</button>
+            <button id="touch-right" class="touch-btn">➡️</button>
+          </div>
+          <div class="touch-btn-group">
+            <button id="touch-jump" class="touch-btn" title="Jump over potholes">🦘</button>
+            <button id="touch-horn" class="touch-btn" title="Honk horn">📢</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL: ORDER ACCEPTANCE -->
+      <div id="modal-order-card" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title" data-i18n="new_order">NEW FOOD ORDER!</div>
+            <span id="order-id-badge" style="color: var(--color-orange); font-weight: 700;">#NX-1042</span>
+          </div>
+
+          <div class="order-detail-card">
+            <div class="order-row">
+              <span class="order-label" data-i18n="restaurant">Restaurant:</span>
+              <span id="order-restaurant-name" class="order-val">Chennai Tiffin House</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="location">Pickup Area:</span>
+              <span id="order-pickup-area" class="order-val">T. Nagar</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="food_items">Food Items:</span>
+              <span id="order-food-name" class="order-val">2x Ghee Masala Dosa 🥞</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="customer">Customer:</span>
+              <span id="order-customer-name" class="order-val">Karthik Raja</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="destination">Delivery Area:</span>
+              <span id="order-customer-area" class="order-val">Anna Nagar</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="reward">Reward:</span>
+              <span id="order-reward" class="order-val highlight">240 Coins</span>
+            </div>
+          </div>
+
+          <button id="btn-accept-order" class="btn-primary" style="width: 100%;">
+            <span>🛵</span>
+            <span data-i18n="accept_order">ACCEPT & RIDE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: RESTAURANT PICKUP -->
+      <div id="modal-pickup" class="modal-overlay">
+        <div class="modal-card" style="text-align: center;">
+          <div style="font-size: 3rem;">🏪</div>
+          <div class="modal-title" id="pickup-modal-restaurant-name">Chennai Tiffin House</div>
+          <p style="color: #DDD; font-size: 0.95rem;" data-i18n="state_at_restaurant">Arrived at Restaurant!</p>
+          <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 12px; margin: 10px 0;">
+            <div id="pickup-modal-food-item" style="font-size: 1.15rem; font-weight: 700; color: var(--color-yellow);">Hot Dosa & Vada</div>
+            <div style="font-size: 0.85rem; color: #AAA; margin-top: 4px;" data-i18n="parcel_collected_toast">Piping hot parcel ready for delivery!</div>
+          </div>
+          <button id="btn-collect-parcel" class="btn-primary" style="width: 100%;">
+            <span data-i18n="collect_parcel_btn">GRAB PARCEL 🛍️</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: CUSTOMER DELIVERY -->
+      <div id="modal-delivery" class="modal-overlay">
+        <div class="modal-card" style="text-align: center;">
+          <div style="font-size: 3rem;">🏡</div>
+          <div class="modal-title" id="delivery-modal-customer-name">Karthik Raja</div>
+          <p style="color: #DDD; font-size: 0.95rem;" data-i18n="state_at_customer">Customer Destination Reached!</p>
+          <div style="background: rgba(255,255,255,0.06); padding: 14px; border-radius: 12px; margin: 10px 0; font-style: italic; color: var(--color-cream);" id="delivery-customer-dialogue">
+            "Nandri pa! Food is super hot and fresh!"
+          </div>
+          <button id="btn-handover-parcel" class="btn-primary" style="width: 100%;">
+            <span data-i18n="handover_parcel_btn">HANDOVER TO CUSTOMER 🎁</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: DELIVERY RESULTS -->
+      <div id="modal-results" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div id="results-title" class="modal-title" data-i18n="delivery_success_title">DELIVERY COMPLETE!</div>
+            <div id="results-stars" style="color: var(--color-gold); font-size: 1.2rem;">⭐⭐⭐⭐⭐</div>
+          </div>
+
+          <div class="order-detail-card">
+            <div class="order-row">
+              <span class="order-label" data-i18n="base_pay">Base Pay:</span>
+              <span id="results-base-pay" class="order-val">+200</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="speed_bonus">Speed Bonus:</span>
+              <span id="results-speed-bonus" class="order-val">+45</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label" data-i18n="tip_bonus">Customer Tip:</span>
+              <span id="results-tip-bonus" class="order-val">+25</span>
+            </div>
+            <hr style="border: 0; border-top: 1px dashed rgba(255,255,255,0.2); margin: 4px 0;" />
+            <div class="order-row">
+              <span class="order-label" data-i18n="total_earned" style="font-weight: 700; color: #FFF;">Total Coins:</span>
+              <span id="results-total-coins" class="order-val highlight">+270 💰</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 6px;">
+            <button id="btn-results-menu" class="btn-secondary" style="flex: 1;" data-i18n="menu_btn">MENU</button>
+            <button id="btn-results-next" class="btn-primary" style="flex: 2;" data-i18n="continue_btn">NEXT ORDER</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL: GARAGE -->
+      <div id="modal-garage" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title" data-i18n="garage_title">SCOOTER GARAGE</div>
+            <button class="btn-icon modal-close-btn">✖</button>
+          </div>
+
+          <!-- Vehicle horizontal selector -->
+          <div id="garage-vehicle-list" class="vehicle-selector"></div>
+
+          <!-- Selected Vehicle Info -->
+          <div class="order-detail-card" id="garage-vehicle-details">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 id="garage-veh-name" style="color: var(--color-yellow);">Namma Scooter 110</h3>
+              <span id="garage-veh-badge" class="company-badge" data-i18n="selected_badge">ACTIVE RIDE</span>
+            </div>
+            <p id="garage-veh-desc" style="font-size: 0.8rem; color: #BBB;">Classic commuter scooter.</p>
+
+            <!-- Stats -->
+            <div class="stat-bar">
+              <span data-i18n="stat_speed">Top Speed</span>
+              <div class="bar-track"><div id="stat-bar-speed" class="bar-fill" style="width: 40%;"></div></div>
+            </div>
+            <div class="stat-bar">
+              <span data-i18n="stat_acceleration">Pickup / Accel</span>
+              <div class="bar-track"><div id="stat-bar-accel" class="bar-fill" style="width: 50%;"></div></div>
+            </div>
+            <div class="stat-bar">
+              <span data-i18n="stat_handling">Agility / Handling</span>
+              <div class="bar-track"><div id="stat-bar-handling" class="bar-fill" style="width: 60%;"></div></div>
+            </div>
+
+            <!-- Upgrades -->
+            <div style="margin-top: 10px; display: flex; gap: 8px;">
+              <button id="btn-upgrade-speed" class="btn-secondary" style="flex: 1; font-size: 0.75rem; padding: 6px;">
+                ⚡ Speed <br><span id="cost-upgrade-speed">80 💰</span>
+              </button>
+              <button id="btn-upgrade-accel" class="btn-secondary" style="flex: 1; font-size: 0.75rem; padding: 6px;">
+                🚀 Accel <br><span id="cost-upgrade-accel">80 💰</span>
+              </button>
+            </div>
+
+            <!-- Color Palette -->
+            <div style="margin-top: 8px;">
+              <div style="font-size: 0.8rem; color: #AAA;" data-i18n="change_color">Body Color:</div>
+              <div id="garage-color-palette" style="display: flex; gap: 8px; margin-top: 6px;"></div>
+            </div>
+          </div>
+
+          <button id="btn-garage-action" class="btn-primary" style="width: 100%;">
+            <span data-i18n="select_vehicle">RIDE THIS SCOOTER</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: CHARACTER CUSTOMIZATION -->
+      <div id="modal-customize" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title" data-i18n="customize_title">RIDER DRESS & STYLE</div>
+            <button class="btn-icon modal-close-btn">✖</button>
+          </div>
+
+          <!-- Rider Name -->
+          <div>
+            <label style="font-size: 0.85rem; color: #AAA;" data-i18n="rider_name">Rider Name:</label>
+            <input type="text" id="input-rider-name" value="Muthu" style="width: 100%; padding: 8px 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--color-yellow); border-radius: 8px; color: #FFF; font-family: var(--font-main); font-size: 1rem; margin-top: 4px;" />
+          </div>
+
+          <!-- Gender -->
+          <div>
+            <div style="font-size: 0.85rem; color: #AAA;" data-i18n="gender">Gender:</div>
+            <div class="custom-grid" id="custom-gender-grid" style="grid-template-columns: 1fr 1fr;"></div>
+          </div>
+
+          <!-- Skin Tone -->
+          <div>
+            <div style="font-size: 0.85rem; color: #AAA;" data-i18n="skin_tone">Skin Tone:</div>
+            <div class="custom-grid" id="custom-skin-grid"></div>
+          </div>
+
+          <!-- Outfits -->
+          <div>
+            <div style="font-size: 0.85rem; color: #AAA;" data-i18n="outfit">Outfit / Clothing:</div>
+            <div class="custom-grid" id="custom-outfit-grid" style="grid-template-columns: 1fr 1fr;"></div>
+          </div>
+
+          <!-- Safety Helmet -->
+          <div>
+            <div style="font-size: 0.85rem; color: #AAA;" data-i18n="helmet">Safety Helmet:</div>
+            <div class="custom-grid" id="custom-helmet-grid" style="grid-template-columns: 1fr 1fr;"></div>
+          </div>
+
+          <button id="btn-save-customization" class="btn-primary" style="width: 100%; margin-top: 8px;">
+            <span data-i18n="save_customization">SAVE STYLE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: SETTINGS -->
+      <div id="modal-settings" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title" data-i18n="settings_title">SETTINGS</div>
+            <button class="btn-icon modal-close-btn">✖</button>
+          </div>
+
+          <!-- Language toggle -->
+          <div class="order-row">
+            <span data-i18n="language">Language:</span>
+            <div style="display: flex; gap: 6px;">
+              <button id="btn-set-en" class="btn-secondary" style="padding: 6px 14px;">English</button>
+              <button id="btn-set-ta" class="btn-secondary" style="padding: 6px 14px;">தமிழ்</button>
+            </div>
+          </div>
+
+          <!-- Audio toggles -->
+          <div class="order-row">
+            <span data-i18n="sound_sfx">Sound SFX:</span>
+            <input type="checkbox" id="check-sound-sfx" checked style="width: 22px; height: 22px;" />
+          </div>
+          <div class="order-row">
+            <span data-i18n="music_vol">Engine Sound:</span>
+            <input type="checkbox" id="check-sound-engine" checked style="width: 22px; height: 22px;" />
+          </div>
+
+          <!-- Controls Guide -->
+          <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; font-size: 0.8rem; color: #CCC; line-height: 1.4;" data-i18n="controls_guide">
+            CONTROLS: A / D or Left / Right Arrows to switch lanes. W or Up Arrow to jump. S or Down Arrow to brake. Space to honk horn.
+          </div>
+
+          <button id="btn-reset-save" class="btn-secondary" style="background: #C0392B; border-color: #922B21; color: #FFF; width: 100%;" data-i18n="clear_data">
+            RESET PROGRESS
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL: ACHIEVEMENTS -->
+      <div id="modal-achievements" class="modal-overlay">
+        <div class="modal-card">
+          <div class="modal-header">
+            <div class="modal-title" data-i18n="achievements">ACHIEVEMENTS</div>
+            <button class="btn-icon modal-close-btn">✖</button>
+          </div>
+
+          <div id="achievements-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+      </div>
+
+      <!-- MODAL: PAUSE -->
+      <div id="modal-pause" class="modal-overlay">
+        <div class="modal-card" style="text-align: center;">
+          <div class="modal-title">GAME PAUSED</div>
+          <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
+            <button id="btn-pause-resume" class="btn-primary" style="width: 100%;">RESUME</button>
+            <button id="btn-pause-restart" class="btn-secondary" style="width: 100%;">RESTART ORDER</button>
+            <button id="btn-pause-menu" class="btn-secondary" style="width: 100%;">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

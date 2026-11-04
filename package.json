@@ -1,0 +1,28 @@
+{
+  "name": "delivery-da",
+  "version": "1.0.0",
+  "description": "DELIVERY DA! - A 2D Tamil Nadu Food Delivery Arcade Game",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "node server.js"
+  },
+  "dependencies": {
+    "phaser": "^3.80.1"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "keywords": [
+    "phaser3",
+    "arcade-game",
+    "tamil-nadu",
+    "food-delivery",
+    "runner",
+    "game"
+  ],
+  "author": "NAMMA EXPRESS Team",
+  "license": "MIT"
+}
